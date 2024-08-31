@@ -64,7 +64,10 @@ jobs:
 
       - name: Get digest of the image
         id: getdigest
-        run: echo "digest=$(docker images --no-trunc --quiet ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest)" >> $GITHUB_OUTPUT
+        run: |
+            digest=$(docker inspect --format="{{.Id}}" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest)
+            echo "$digest"
+            echo "digest=$(digest)" >> $GITHUB_OUTPUT
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
