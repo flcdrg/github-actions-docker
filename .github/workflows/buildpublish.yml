@@ -35,7 +35,7 @@ jobs:
           name: myapp
 
       - name: Import Docker image from tar.gz
-        run: docker import myapp.tar.gz
+        run: docker import myapp.tar.gz ghcr.io/${{ github.repository }}/myapp:latest
 
       # List docker images
       - name: List Docker images
