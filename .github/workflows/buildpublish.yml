@@ -67,9 +67,9 @@ jobs:
         run: |
             docker inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
             echo ""
-            digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest)
-            echo "$digest"
-            echo "digest=$(digest)" >> $GITHUB_OUTPUT
+            digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest | grep -o 'sha256:.*')
+            echo "digest: $digest"
+            echo "digest=$digest" >> $GITHUB_OUTPUT
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
