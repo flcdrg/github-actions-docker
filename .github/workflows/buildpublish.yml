@@ -1,0 +1,19 @@
+name: Build and Publish
+
+on:
+  push:
+    branches: ["main"]
+    paths: [".github/workflows/buildpublish.yml"]
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Build Docker image
+              run: docker build -t ghcr.io/${{ github.repository }}/myapp:latest .
+
+            - name: List Docker images
+              run: docker images
