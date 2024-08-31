@@ -40,3 +40,25 @@ jobs:
       # List docker images
       - name: List Docker images
         run: docker images
+
+      # Publish Docker image
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3.3.0
+        with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: docker push ghcr.io/${{ github.repository }}/myapp:latest
+
+      # - name: Get digest of the image
+      #   id: getdigest
+      #   run: echo "digest=$(docker images --no-trunc --quiet ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest)" >> $GITHUB_OUTPUT
+
+      # - name: Generate artifact attestation
+      #   uses: actions/attest-build-provenance@v1
+      #   with:
+      #     subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+      #     subject-digest: ${{ steps.getdigest.outputs.digest }}
+      #     push-to-registry: true
