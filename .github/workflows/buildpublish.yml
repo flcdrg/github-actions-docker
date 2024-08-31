@@ -65,6 +65,8 @@ jobs:
       - name: Get digest of the image
         id: getdigest
         run: |
+            docker inspect ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+            echo ""
             digest=$(docker inspect --format="{{.Id}}" ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest)
             echo "$digest"
             echo "digest=$(digest)" >> $GITHUB_OUTPUT
