@@ -6,14 +6,37 @@ on:
     paths: [".github/workflows/buildpublish.yml"]
 
 jobs:
-    build:
-        runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - uses: actions/checkout@v4
+    steps:
+      - uses: actions/checkout@v4
 
-            - name: Build Docker image
-              run: docker build -t ghcr.io/${{ github.repository }}/myapp:latest .
+      - name: Build Docker image to tar.gz
+        run: docker build -t ghcr.io/${{ github.repository }}/myapp:latest .
 
-            - name: List Docker images
-              run: docker images
+      - name: Save Docker image to tar.gz
+        run: docker save ghcr.io/${{ github.repository }}/myapp:latest -o myapp.tar | gzip > myapp.tar.gz
+
+      # publish artifact
+      - name: Publish artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: myapp
+          path: myapp.tar.gz
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - uses: actions/download-artifact@v2
+        with:
+          name: myapp
+
+      - name: Import Docker image from tar.gz
+        run: docker import myapp.tar.gz
+
+      # List docker images
+      - name: List Docker images
+        run: docker images
