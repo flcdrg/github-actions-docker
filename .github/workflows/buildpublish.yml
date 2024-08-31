@@ -49,7 +49,7 @@ jobs:
 
       # List docker images
       - name: List Docker images
-        run: docker images
+        run: docker images --digests
 
       # Publish Docker image
       - name: Log in to the Container registry
