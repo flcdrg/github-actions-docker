@@ -41,9 +41,9 @@ jobs:
           #   type=sha
           flavor: |
             latest=true
-        env:
+        #env:
           # Don't add 'manifest,index' due to https://github.com/docker/buildx/issues/2591
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest
+          # DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest
 
       - name: Build Docker image
         id: build-and-push
@@ -54,7 +54,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          annotations: ${{ steps.meta.outputs.annotations }}
+          #annotations: ${{ steps.meta.outputs.annotations }}
           load: true # Make image available locally
 
       - name: List Docker images
