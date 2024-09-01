@@ -39,7 +39,8 @@ jobs:
           flavor: |
             latest=true
         env:
-          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest,index
+          # Don't add 'manifest,index' due to https://github.com/docker/buildx/issues/2591
+          DOCKER_METADATA_ANNOTATIONS_LEVELS: manifest
 
       - name: Build Docker image
         id: build-and-push
