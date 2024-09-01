@@ -9,7 +9,7 @@ env:
   DOCKERHUB_USERNAME: flcdrg
   REGISTRY_GITHUB: ghcr.io
   REGISTRY_DOCKERHUB: docker.io
-  IMAGE_NAME: ${{ github.repository }}/myapp
+  IMAGE_NAME: ${{ github.repository }}-myapp
 
 jobs:
   build:
