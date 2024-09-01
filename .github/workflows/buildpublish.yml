@@ -84,6 +84,7 @@ jobs:
         run: |
           docker import myapp.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
           docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest index.docker.io/${{ env.IMAGE_NAME }}:latest
 
       # List docker images
       - name: List Docker images
@@ -132,6 +133,6 @@ jobs:
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.IMAGE_NAME}}
+          subject-name: index.docker.io/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.getdigest.outputs.digest }}
           push-to-registry: true
