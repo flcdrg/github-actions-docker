@@ -49,7 +49,7 @@ jobs:
       - name: Import Docker image from tar.gz
         run: |
             docker import myapp.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
-            docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.REGISTRY_DOCKERHUB }}/${{ env.IMAGE_NAME }}:latest
+            docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
 
       # List docker images
       - name: List Docker images
@@ -70,12 +70,15 @@ jobs:
           username: ${{ env.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      - name: List Docker logins
+        run: cat ~/.docker/config.json
+  
       - name: Push Docker image to GitHub
         run: docker push ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
 
       - name: Push Docker image to DockerHub
-        run: docker push ${{ env.REGISTRY_DOCKERHUB }}/${{ env.IMAGE_NAME }}:latest
-        
+        run: docker push ${{ env.IMAGE_NAME }}:latest
+
       - name: Get digest of the image
         id: getdigest
         run: |
