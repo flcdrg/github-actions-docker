@@ -19,7 +19,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      #- uses: actions/checkout@v4
 
       - name: Extract Docker metadata
         id: meta
@@ -50,7 +50,13 @@ jobs:
         run: docker images
 
       - name: Save Docker image to tar.gz
-        run: docker save ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest -o myapp.tar | gzip > myapp.tar.gz
+        run: |
+          docker save ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest -o myapp.tar
+
+          # Compress tar file with gzip
+          gzip myapp.tar
+
+          ls -al
 
       # publish artifact
       - name: Publish artifact
