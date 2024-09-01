@@ -18,8 +18,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build Docker image to tar.gz
-        run: docker build -t ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest .
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5.5.1
+        with:
+          images: |
+            ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}
+            ${{ env.IMAGE_NAME }}
+
+      - name: Build Docker image
+        id: build-and-push
+        uses: docker/build-push-action@v6.7.0
+        with:
+          context: .
+          push: false
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          load: true # Make image available locally
+
+      - name: List Docker images
+        run: docker images
 
       - name: Save Docker image to tar.gz
         run: docker save ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest -o myapp.tar | gzip > myapp.tar.gz
