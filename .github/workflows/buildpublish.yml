@@ -5,6 +5,9 @@ on:
     branches: ["main"]
     paths: [".github/workflows/buildpublish.yml"]
 
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
 env:
   DOCKERHUB_USERNAME: flcdrg
   REGISTRY_GITHUB: ghcr.io
@@ -73,8 +76,8 @@ jobs:
 
       - name: Import Docker image from tar.gz
         run: |
-            docker import myapp.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
-            docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
+          docker import myapp.tar.gz ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
+          docker tag ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest ${{ env.IMAGE_NAME }}:latest
 
       # List docker images
       - name: List Docker images
@@ -97,7 +100,7 @@ jobs:
 
       - name: List Docker logins
         run: cat ~/.docker/config.json
-  
+
       - name: Push Docker image to GitHub
         run: docker push ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
 
@@ -107,11 +110,11 @@ jobs:
       - name: Get digest of the image
         id: getdigest
         run: |
-            docker inspect ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
-            echo ""
-            digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest | grep -o 'sha256:.*')
-            echo "digest: $digest"
-            echo "digest=$digest" >> $GITHUB_OUTPUT
+          docker inspect ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest
+          echo ""
+          digest=$(docker inspect --format='{{index .RepoDigests 0}}' ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}:latest | grep -o 'sha256:.*')
+          echo "digest: $digest"
+          echo "digest=$digest" >> $GITHUB_OUTPUT
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
