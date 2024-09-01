@@ -25,6 +25,13 @@ jobs:
           images: |
             ${{ env.REGISTRY_GITHUB }}/${{ env.IMAGE_NAME }}
             ${{ env.IMAGE_NAME }}
+          # tags: |
+          #   type=semver,pattern={{version}},value=${{ steps.tag_version.outputs.new_tag }}
+          #   type=semver,pattern={{major}}.{{minor}},value=${{ steps.tag_version.outputs.new_tag }}
+          #   type=semver,pattern={{major}},value=${{ steps.tag_version.outputs.new_tag }}
+          #   type=sha
+          flavor: |
+            latest=true
 
       - name: Build Docker image
         id: build-and-push
